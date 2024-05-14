@@ -1,11 +1,19 @@
 """
-    main.py: Main file for the project that will run the models trained
+    interface.py: Main file for the project that will run the models trained
     to control the environments using the gymnasium package (maintained
     fork of the OpenAI gym package)
 """
 
 import os
 import gymnasium as gym
+import torch
+
+if not torch.cuda.is_available():
+    print("CUDA not available. Running on CPU...")
+    device = torch.device("cpu")
+else:
+    print("CUDA available. Running on GPU...")
+    device = torch.device("cuda:0")
 
 def run(env, model):
     """

@@ -6,5 +6,5 @@ Here's the list of the different files used in this project.
 
 | File | Description | Link |
 | --- | --- | --- |
-| `main.py` | Main script to run the different models | [Code](main.py) |
+| `interface.py` | Main script to run the different models | [Code](interface.py) |
 | `requirements.txt` | Required libraries to run the code | [Requirements](requirements.txt) |

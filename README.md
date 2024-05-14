@@ -21,7 +21,7 @@ pip install -r requirements.txt
 ## Usage
 To run the code, you can use the following command:
 ```bash
-python code/main.py
+python code/interface.py
 ```
 
 ## Contents
