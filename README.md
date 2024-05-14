@@ -29,5 +29,5 @@ python code/main.py
 | --- | --- | --- |
 | Code | Implementation of the different methods and algorithms | [Code](code/CODE.md) |
 | Handwritten work | Statement and report of the project | [PDF](documents/PDF.md) |
+| Models | Models used in the project | [Models](models/MODELS.md) |
 | Figures | Figures used in the report | [Figures](figures/) |
-

@@ -27,7 +27,7 @@ def main():
     """
 
     try:
-        environments = os.listdir("models")
+        environments = [d for d in os.listdir("models") if os.path.isdir(os.path.join("models", d))]
     except FileNotFoundError:
         print("Models directory not found. Are you running the file from the correct directory?")
         print("Please make sure to follow the instructions in the README file. Exiting...")
