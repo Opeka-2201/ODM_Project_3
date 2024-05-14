@@ -63,7 +63,7 @@ def main():
 
     models = os.listdir(f"models/{env}")
     if not models:
-        print("No models found for the environment.")
+        print("\nNo models found for the environment.")
         print("Have you trained or downloaded any models for this environment?")
         print("Please make sure to follow the instructions in the README file. Exiting...")
         print()
