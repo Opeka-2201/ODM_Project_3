@@ -1,0 +1,20 @@
+# Environment setup
+gymnasium[mujoco]
+mujoco==2.3.3
+
+# Loop management
+tqdm
+
+# Data manipulation
+numpy
+
+# Reinforcement learning
+stable_baselines3
+
+# Machine learning
+torch
+scikit-learn
+
+# Visualization
+matplotlib
+imageio
