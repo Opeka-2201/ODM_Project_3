@@ -15,6 +15,7 @@ def run(env, model):
             env (str): The environment to run the model on
             model (str): The model to run on the environment
     """
+
     print(f"Running model {model} on environment {env}...")
     gym_env = gym.make(env, render_mode="human")
     print(gym_env)
@@ -41,7 +42,7 @@ def main():
 
     print("Hello and welcome to the main file of the project!")
     print("This file will run the models trained to control the environments\n")
-    
+
     print("Here are the available environments:")
     for i, env in enumerate(environments):
         print(f"    {i+1}. {env}")
