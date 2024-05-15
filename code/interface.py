@@ -6,15 +6,12 @@
 
 import os
 import gymnasium as gym
-import torch
 import pandas as pd
 
-if not torch.cuda.is_available():
-    print("CUDA not available. Running on CPU...\n")
-    device = torch.device("cpu")
-else:
-    print("CUDA available. Running on GPU...\n")
-    device = torch.device("cuda:0")
+from fqi import run_fqi
+from reinforce import run_reinforce
+from ddpg import run_ddpg
+
 
 def run(env, model):
     """
@@ -25,7 +22,7 @@ def run(env, model):
             model (str): The model to run on the environment
     """
 
-    print(f"Running model {model} on environment {env}...")
+    print(f"Running model {model} on environment {env}...\n")
     gym_env = gym.make(env, render_mode="human")
 
     if not os.path.exists(os.path.join("models", "models.csv")):
@@ -33,24 +30,26 @@ def run(env, model):
         return
 
     correspondance_df = pd.read_csv("models/models.csv")
-    model_type = correspondance_df[correspondance_df["path"] == os.path.join(env, model)]["model_type"]
+    model_type = correspondance_df[correspondance_df["path"] == os.path.join(env, model)]\
+                                  ["model_type"]
     if model_type.empty:
         print("Model not found in the correspondance file. Exiting...\n")
         return
 
+    model_path = os.path.join("models", env, model)
     model_type = model_type.values[0]
+
     if model_type == "fqi":
-        pass
+        run_fqi(gym_env, model_path)
     elif model_type == "reinforce":
-        pass
+        run_reinforce(gym_env, model_path)
     elif model_type == "ddpg":
-        pass
+        run_ddpg(gym_env, model_path)
     else:
         print("Invalid model type. Exiting...\n")
         return
-    
+
     print("Model run complete. Exiting...\n")
-    print()
     return
 
 def main():
@@ -63,13 +62,11 @@ def main():
     except FileNotFoundError:
         print("Models directory not found. Are you running the file from the correct directory?")
         print("Please make sure to follow the instructions in the README file. Exiting...\n")
-        print()
         return
 
     if not environments:
         print("No environments found. Are you running the file from the correct directory?")
         print("Please make sure to follow the instructions in the README file. Exiting...\n")
-        print()
         return
 
     print("Hello and welcome to the main file of the project!")
@@ -98,7 +95,6 @@ def main():
         print("\nNo models found for the environment.")
         print("Have you trained or downloaded any models for this environment?")
         print("Please make sure to follow the instructions in the README file. Exiting...\n")
-        print()
         return
 
     print(f"\nHere are the available models for the environment {env}:")
@@ -119,7 +115,6 @@ def main():
         else:
             print("Invalid model choice. Please try again.")
 
-    print()
     run(env, model)
 
 if __name__ == "__main__":
