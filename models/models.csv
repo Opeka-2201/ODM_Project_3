@@ -1,0 +1,3 @@
+path,model_type
+InvertedPendulum-v4/fqi.pth,fqi
+InvertedDoublePendulum-v4/fqi.pth,fqi

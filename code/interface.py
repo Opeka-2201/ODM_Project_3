@@ -7,12 +7,13 @@
 import os
 import gymnasium as gym
 import torch
+import pandas as pd
 
 if not torch.cuda.is_available():
-    print("CUDA not available. Running on CPU...")
+    print("CUDA not available. Running on CPU...\n")
     device = torch.device("cpu")
 else:
-    print("CUDA available. Running on GPU...")
+    print("CUDA available. Running on GPU...\n")
     device = torch.device("cuda:0")
 
 def run(env, model):
@@ -26,8 +27,31 @@ def run(env, model):
 
     print(f"Running model {model} on environment {env}...")
     gym_env = gym.make(env, render_mode="human")
-    print(gym_env)
 
+    if not os.path.exists(os.path.join("models", "models.csv")):
+        print("Correspondance file not found. Exiting...\n")
+        return
+
+    correspondance_df = pd.read_csv("models/models.csv")
+    model_type = correspondance_df[correspondance_df["path"] == os.path.join(env, model)]["model_type"]
+    if model_type.empty:
+        print("Model not found in the correspondance file. Exiting...\n")
+        return
+
+    model_type = model_type.values[0]
+    if model_type == "fqi":
+        pass
+    elif model_type == "reinforce":
+        pass
+    elif model_type == "ddpg":
+        pass
+    else:
+        print("Invalid model type. Exiting...\n")
+        return
+    
+    print("Model run complete. Exiting...\n")
+    print()
+    return
 
 def main():
     """
@@ -38,13 +62,13 @@ def main():
         environments = [d for d in os.listdir("models") if os.path.isdir(os.path.join("models", d))]
     except FileNotFoundError:
         print("Models directory not found. Are you running the file from the correct directory?")
-        print("Please make sure to follow the instructions in the README file. Exiting...")
+        print("Please make sure to follow the instructions in the README file. Exiting...\n")
         print()
         return
 
     if not environments:
         print("No environments found. Are you running the file from the correct directory?")
-        print("Please make sure to follow the instructions in the README file. Exiting...")
+        print("Please make sure to follow the instructions in the README file. Exiting...\n")
         print()
         return
 
@@ -73,7 +97,7 @@ def main():
     if not models:
         print("\nNo models found for the environment.")
         print("Have you trained or downloaded any models for this environment?")
-        print("Please make sure to follow the instructions in the README file. Exiting...")
+        print("Please make sure to follow the instructions in the README file. Exiting...\n")
         print()
         return
 
