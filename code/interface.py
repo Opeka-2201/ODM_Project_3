@@ -9,7 +9,7 @@ import gymnasium as gym
 import pandas as pd
 
 from fqi import run_fqi, FQINetwork
-from reinforce import run_reinforce
+from reinforce import run_reinforce, REINFORCENetwork
 from ddpg import run_ddpg
 
 def run(env, model):
