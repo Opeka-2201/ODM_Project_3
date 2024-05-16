@@ -20,8 +20,8 @@ import numpy as np
 ## TRAINING CONSTANTS ##
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 MODELS_PATH = "models"
-ENVIRONMENTS = [] # Comment this line and uncomment the next one to trigger training
-#ENVIRONMENTS = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
+ENVIRONMENTS_TRAIN = []
+ENVIRONMENTS_RUN = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
 SEED = 123
 LR = 0.001
 GAMMA = 0.99
@@ -252,7 +252,7 @@ def run_fqi(gym_env, model_path):
 
     env_name = gym_env.unwrapped.spec.id
 
-    if env_name not in ENVIRONMENTS:
+    if env_name not in ENVIRONMENTS_RUN:
         raise ValueError("Invalid environment")
 
     if env_name == "InvertedDoublePendulum-v4":
@@ -275,12 +275,11 @@ def run_fqi(gym_env, model_path):
     while True:
         action = agent.choose_action(state)
         state, reward, terminal, truncated, _ = gym_env.step(action)
-        print(f"Cumulative reward: {cumulative_reward}\r", end="")
         cumulative_reward += reward
         if terminal or truncated:
             break
 
-    print(f"\nCumulative reward: {cumulative_reward}")
+    print(f"Cumulative reward: {cumulative_reward}")
 
 def train(gym_env):
     """
@@ -340,7 +339,7 @@ def train(gym_env):
     return runs
 
 if __name__ == "__main__":
-    for env in ENVIRONMENTS:
+    for env in ENVIRONMENTS_TRAIN:
         gym_env = gym.make(env)
         rewards_run = train(gym_env)
         gym_env.close()

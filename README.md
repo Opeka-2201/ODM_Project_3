@@ -25,7 +25,7 @@ python code/interface.py
 ```
 
 You will then be able to run the different models on the simple and double inverted pendulum environements.
-Watch out if you run the files corresponding for the models directly, it will trigger the training of the models, overwriting the existing ones. It is for that that we recommend to use the interface and that the lines choosing the environments are commented in the top of the files.
+Watch out if you run the files corresponding for the models directly, it will trigger the training of the models, overwriting the existing ones. It is for that that we recommend to use the interface and that the environment array is initalized empty.
 
 ## Contents
 | Subject | Description | Link |
