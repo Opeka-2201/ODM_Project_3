@@ -6,6 +6,7 @@
 
 # pylint: disable=too-few-public-methods, redefined-outer-name
 
+import os
 import gymnasium as gym
 import matplotlib.pyplot as plt
 import torch
@@ -23,17 +24,17 @@ ENVIRONMENTS = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
 SEED = 123
 LR = 0.001
 GAMMA = 0.99
-NB_EPOCH = 100
+NB_EPOCH = 50
 EPOCHS_SAVE_INTERVAL = 10
 BATCH_SIZE = 128
 NB_ACTIONS = 5
 ACTIONS_BOUND = 3
-NB_TRANSITIONS = 1_000_000
+NB_TRANSITIONS = 200_002
 ACTIONS = torch.linspace(-ACTIONS_BOUND, ACTIONS_BOUND, NB_ACTIONS).to(DEVICE)
 
 ## RUNNING CONSTANTS ##
 NB_RUNS = 3
-NB_RUN_STEP = 15
+NB_RUN_STEP = 10
 NB_ACTIONS_RUN_SIMPLE = 100
 ACTIONS_RUN_SIMPLE = torch.linspace(-ACTIONS_BOUND, ACTIONS_BOUND, NB_ACTIONS_RUN_SIMPLE)
 NB_ACTIONS_RUN_DOUBLE = 30
@@ -232,8 +233,8 @@ def train_loop(gym_env, osst, actions, nb_actions, batch_size, fqinet, nb_epoch,
             error = criterion(post_prediction, previous_prediction)
 
         if epoch % save_epochs == 0:
-            print(f"Epochs: {epoch}/{nb_epoch}, Loss: {batch_loss.item()},\
-                   Error: {error.item()}\r", end="")
+            print(f"Epochs: {epoch}/{nb_epoch}, Loss: {batch_loss.item()}",\
+                  f"Error: {error.item()}\r", end="")
             torch.save(fqinet, f"{MODELS_PATH}/{env_name}/fqi_{osst_size}.pt")
 
     return fqinet
@@ -264,7 +265,7 @@ def run_fqi(gym_env, model_path):
     else:
         raise ValueError("Invalid environment")
 
-    fqinet.load_state_dict(torch.load(model_path))
+    fqinet = torch.load(model_path)
     fqinet.eval()
     agent = Agent(fqinet, actions)
 
@@ -285,8 +286,12 @@ def train(gym_env):
         Main function of the project that will train the FQI model on the selected environments
     """
 
-    print(f"Training FQI model on environment {gym_env.unwrapped.spec.id}...\n")
+    env_name = gym_env.unwrapped.spec.id
+
+    print(f"Training FQI model on environment {env_name}...\n")
     features = gym_env.observation_space.shape[0] + 1
+
+    best_cumulative_reward = -np.inf
 
     runs = []
     for run in range(1, NB_RUNS+1):
@@ -302,7 +307,7 @@ def train(gym_env):
             fqinet = train_loop(gym_env, osst, ACTIONS, NB_ACTIONS, BATCH_SIZE,\
                                 fqinet, NB_EPOCH, EPOCHS_SAVE_INTERVAL)
 
-            test_env = gym.make(gym_env.unwrapped.spec.id)
+            test_env = gym.make(env_name)
             test_agent = Agent(fqinet, ACTIONS)
 
             state, _ = test_env.reset()
@@ -314,14 +319,24 @@ def train(gym_env):
                 if terminal or truncated:
                     break
 
+            if cumulative_reward >= best_cumulative_reward:
+                best_cumulative_reward = cumulative_reward
+                torch.save(fqinet, f"{MODELS_PATH}/{env_name}/fqi.pt")
+
             scores_for_osst_size.append(cumulative_reward)
             print(f"{test_env.unwrapped.spec.id} - Run {run} - OSST size {osst_size}",\
-                  f" - Score {cumulative_reward}\n")
+                  f"- Score {cumulative_reward}\n")
             test_env.close()
 
         runs.append(scores_for_osst_size)
 
-        return runs
+    model_dir = f"{MODELS_PATH}/{env_name}"
+    for file_name in os.listdir(model_dir):
+        if file_name != "fqi.pt":
+            file_path = os.path.join(model_dir, file_name)
+            os.remove(file_path)
+
+    return runs
 
 if __name__ == "__main__":
     for env in ENVIRONMENTS:

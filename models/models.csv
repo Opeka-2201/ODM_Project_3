@@ -1,7 +1,7 @@
 path,model_type
-InvertedPendulum-v4/fqi.pth,fqi
-InvertedPendulum-v4/reinforce.pth,reinforce
-InvertedPendulum-v4/ddpg.pth,ddpg
-InvertedDoublePendulum-v4/fqi.pth,fqi
-InvertedDoublePendulum-v4/reinforce.pth,reinforce
-InvertedDoublePendulum-v4/ddpg.pth,ddpg
+InvertedPendulum-v4/fqi.pt,fqi
+InvertedPendulum-v4/reinforce.pt,reinforce
+InvertedPendulum-v4/ddpg.pt,ddpg
+InvertedDoublePendulum-v4/fqi.pt,fqi
+InvertedDoublePendulum-v4/reinforce.pt,reinforce
+InvertedDoublePendulum-v4/ddpg.pt,ddpg

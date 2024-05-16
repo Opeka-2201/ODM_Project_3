@@ -8,7 +8,7 @@ import os
 import gymnasium as gym
 import pandas as pd
 
-from fqi import run_fqi
+from fqi import run_fqi, FQINetwork
 from reinforce import run_reinforce
 from ddpg import run_ddpg
 
@@ -90,7 +90,7 @@ def main():
         else:
             print("Invalid environment choice. Please try again.")
 
-    models = os.listdir(f"models/{env}")
+    models = [file for file in os.listdir(os.path.join("models", env)) if file.endswith(".pt")]
     if not models:
         print("\nNo models found for the environment.")
         print("Have you trained or downloaded any models for this environment?")
