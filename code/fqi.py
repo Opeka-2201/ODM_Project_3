@@ -20,7 +20,8 @@ import numpy as np
 ## TRAINING CONSTANTS ##
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 MODELS_PATH = "models"
-ENVIRONMENTS = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
+ENVIRONMENTS = [] # Comment this line and uncomment the next one to trigger training
+#ENVIRONMENTS = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
 SEED = 123
 LR = 0.001
 GAMMA = 0.99
