@@ -7,17 +7,29 @@
 import os
 import torch
 
-def run_ddpg(env, model):
+def run_ddpg(env, model_path):
     """
         Function that will run the DDPG model on the environment
         
         Arguments:
             env (str): The environment to run the FQI model on
+            model_path (str): The path to the model to use
     """
-    
+
     if not torch.cuda.is_available():
         print("CUDA not available. Running on CPU...\n")
         device = torch.device("cpu")
     else:
         print("CUDA available. Running on GPU...\n")
-        device = torch.device("cuda:0") 
+        device = torch.device("cuda:0")
+
+def main():
+    """
+        Main function of the project that will run the models trained to control
+        the different environments
+    """
+
+    pass
+
+if __name__ == "__main__":
+    main()

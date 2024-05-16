@@ -12,7 +12,6 @@ from fqi import run_fqi
 from reinforce import run_reinforce
 from ddpg import run_ddpg
 
-
 def run(env, model):
     """
         Function that will run the model on the environment
@@ -49,6 +48,7 @@ def run(env, model):
         print("Invalid model type. Exiting...\n")
         return
 
+    gym_env.close()
     print("Model run complete. Exiting...\n")
     return
 
