@@ -15,7 +15,7 @@ To ensure the reproducibility of the results, we provide a `requirements.txt` fi
 ```bash
 conda create --name <env> python=3.10
 conda activate <env>
-pip install -r requirements.txt
+pip install -r code/requirements.txt
 ```
 
 ## Usage
