@@ -20,7 +20,7 @@ import numpy as np
 ## TRAINING CONSTANTS ##
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 MODELS_PATH = "models"
-ENVIRONMENTS_TRAIN = []
+ENVIRONMENTS_TRAIN = [] # Change to ["InvertedDoublePendulum-v4", "InvertedPendulum-v4" for training
 ENVIRONMENTS_RUN = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
 SEED = 123
 LR = .001
@@ -150,7 +150,7 @@ def generate_osst(gym_env, nb_transitions):
     """
 
     seed = SEED
-    state, _ = gym_env.reset(seed=seed)
+    state = gym_env.reset(seed=seed)[0]
     features = gym_env.observation_space.shape[0] + 1
     osst = np.zeros((nb_transitions, 2 * features + 1))
 
@@ -161,7 +161,7 @@ def generate_osst(gym_env, nb_transitions):
 
         if terminal or trunc:
             seed += 1
-            state, _ = gym_env.reset(seed=seed)
+            state = gym_env.reset(seed=seed)[0]
         else:
             state = next_state
 
@@ -270,7 +270,7 @@ def run_fqi(gym_env, model_path):
     fqinet.eval()
     agent = Agent(fqinet, actions)
 
-    state, _ = gym_env.reset()
+    state = gym_env.reset()[0]
     cumulative_reward = 0
     while True:
         action = agent.choose_action(state)
@@ -310,7 +310,7 @@ def train(gym_env):
             test_env = gym.make(env_name)
             test_agent = Agent(fqinet, ACTIONS)
 
-            state, _ = test_env.reset()
+            state = test_env.reset()[0]
             cumulative_reward = 0
             while True:
                 action = test_agent.choose_action(state)

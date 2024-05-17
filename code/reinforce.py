@@ -16,7 +16,7 @@ from torch.distributions.normal import Normal
 ## TRAINING CONSTANTS ##
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 MODELS_PATH = "models"
-ENVIRONMENTS_TRAIN = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
+ENVIRONMENTS_TRAIN = [] # Change to ["InvertedDoublePendulum-v4", "InvertedPendulum-v4" for training
 ENVIRONMENTS_RUN = ["InvertedDoublePendulum-v4", "InvertedPendulum-v4"]
 LR = .001
 GAMMA = .99
@@ -143,7 +143,7 @@ def train_loop(gym_env, optimizer, reinforcenet, nb_epochs, save_epochs):
     reinforcenet.train()
 
     for epoch in range(nb_epochs+1):
-        state, _ = gym_env.reset()
+        state = gym_env.reset()[0]
         probabilities_epoch = torch.empty((0,), dtype=torch.float32)
         rewards_epoch = torch.empty((0,), dtype=torch.float32)
         cumulative_reward = 0
@@ -198,7 +198,7 @@ def run_reinforce(env, model_path):
     reinforcenet = torch.load(model_path)
     reinforcenet.eval()
 
-    state, _ = env.reset()
+    state = env.reset()[0]
     cumulative_reward = 0
 
     while True:
@@ -243,3 +243,4 @@ if __name__ == "__main__":
         plt.close()
 
         print(f"Finished training Reinforce on {env_name}\n")
+        env.close()

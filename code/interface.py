@@ -4,13 +4,15 @@
     fork of the OpenAI gym package)
 """
 
+# pylint: disable=unused-import
+
 import os
 import gymnasium as gym
 import pandas as pd
 
 from fqi import run_fqi, FQINetwork
 from reinforce import run_reinforce, REINFORCENetwork
-from ddpg import run_ddpg
+from ddpg import run_ddpg, DDPGNetworkBuffer, DDPGNetworkActor
 
 def run(env, model):
     """
